@@ -5,6 +5,7 @@ import { enGB } from 'date-fns/locale';
 import DatePicker from '../components/DatePicker';
 import RangePicker from '../components/RangePicker';
 import { default as DatePickerV2 } from '../components/DatePickerV2';
+import { default as RangePickerV2 } from '../components/RangePickerV2';
 import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
@@ -14,6 +15,9 @@ const Home: NextPage = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const [date2, setDate2] = useState(new Date());
+
+  const [startDate2, setStartDate2] = useState<Date | null>(null);
+  const [endDate2, setEndDate2] = useState<Date | null>(null);
 
   const [showChild, setShowChild] = useState(false);
 
@@ -56,6 +60,22 @@ const Home: NextPage = () => {
             : 'none'}
         </p>
         <DatePickerV2 date={date2} setDate={setDate2} />
+
+        <p>
+          {startDate2
+            ? format(startDate2, 'ccc, dd MMM HH:mm', { locale: enGB })
+            : 'none'}
+          {' - '}
+          {endDate2
+            ? format(endDate2, 'ccc, dd MMM HH:mm', { locale: enGB })
+            : 'none'}
+        </p>
+        <RangePickerV2
+          startDate={startDate2}
+          setStartDate={setStartDate2}
+          endDate={endDate2}
+          setEndDate={setEndDate2}
+        />
       </main>
     </div>
   );
