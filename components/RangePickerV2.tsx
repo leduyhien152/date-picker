@@ -110,6 +110,7 @@ const RangePicker = ({
           onClick={() => {
             if (!isDisabledDate(today)) {
               setDate(today);
+              setMonthYear(today);
             }
           }}
         >

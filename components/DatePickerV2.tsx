@@ -55,6 +55,7 @@ const DatePicker = ({ date, setDate }: Props) => {
           className="text-blue-500 cursor-pointer hover:text-blue-400"
           onClick={() => {
             setDate(today);
+            setMonthYear(today);
           }}
         >
           Today
