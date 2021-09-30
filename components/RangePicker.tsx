@@ -1,21 +1,18 @@
 import { useState } from 'react';
 import { DateRangePickerCalendar } from 'react-nice-dates';
 import {
-  addMonths,
   format,
   getHours,
   getMinutes,
-  getMonth,
-  getYear,
+  set,
   setHours,
   setMinutes,
-  setMonth,
-  setYear,
   startOfDay,
 } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import classNames from 'classnames';
-
+import DateOverlay from './DateOverlay';
+import { getDateWithoutTime } from '../utils/DateUtils';
 import 'react-nice-dates/build/style.css';
 
 interface Props {
@@ -26,6 +23,7 @@ interface Props {
 }
 
 type DateRangeFocus = 'startDate' | 'endDate';
+type CalendarState = 'DAY' | 'MONTH' | 'YEAR';
 
 const RangePicker = ({
   startDate,
@@ -33,19 +31,22 @@ const RangePicker = ({
   endDate,
   setEndDate,
 }: Props) => {
-  const [monthYear, setMonthYear] = useState(new Date());
+  const today = getDateWithoutTime();
+  const [monthYear, setMonthYear] = useState(today);
+  const [calendarState, setCalendarState] = useState<CalendarState>('DAY');
   const [focus, setFocus] = useState<DateRangeFocus>('startDate');
 
   const date = focus === 'startDate' ? startDate : endDate;
   const setDate = focus === 'startDate' ? setStartDate : setEndDate;
 
+  const isDisabledDate = (date: Date) =>
+    focus === 'startDate'
+      ? !!endDate && startOfDay(date).getTime() > startOfDay(endDate).getTime()
+      : !!startDate &&
+        startOfDay(date).getTime() < startOfDay(startDate).getTime();
+
   const modifiers = {
-    disabled: (date: Date) =>
-      focus === 'startDate'
-        ? !!endDate &&
-          startOfDay(date).getTime() > startOfDay(endDate).getTime()
-        : !!startDate &&
-          startOfDay(date).getTime() < startOfDay(startDate).getTime(),
+    disabled: (date: Date) => isDisabledDate(date),
   };
 
   return (
@@ -57,62 +58,44 @@ const RangePicker = ({
             focus === 'startDate' ? 'translate-x-0' : 'translate-x-full',
           )}
         ></div>
-        <div className="grid grid-cols-2 text-center items-center justify-center absolute top-0 left-0 w-full h-full cursor-pointer">
-          <div onClick={() => setFocus('startDate')}>
+        <div className="grid grid-cols-2 text-center items-center justify-center absolute top-0 left-0 w-full h-full">
+          <div
+            className="cursor-pointer flex items-center justify-center h-full"
+            onClick={() => {
+              setFocus('startDate');
+              if (startDate) {
+                setMonthYear(getDateWithoutTime(startDate));
+              }
+            }}
+          >
             {startDate
               ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
               : '-'}
           </div>
-          <div onClick={() => setFocus('endDate')}>
+          <div
+            className="cursor-pointer flex items-center justify-center h-full"
+            onClick={() => {
+              setFocus('endDate');
+              if (endDate) {
+                setMonthYear(getDateWithoutTime(endDate));
+              }
+            }}
+          >
             {endDate
               ? format(endDate, 'ccc, dd MMM HH:mm', { locale: enGB })
               : '-'}
           </div>
         </div>
       </div>
-      <div className="relative">
-        <div className="absolute top-0 z-50 w-full bg-white">
-          <div className="nice-dates-navigation">
-            <a
-              className="nice-dates-navigation_previous p-0 pb-0"
-              onClick={() => setMonthYear(addMonths(monthYear, -1))}
-            />
-            <div className="flex justify-center gap-x-3 col-span-2">
-              <select
-                name="month"
-                className="w-36 h-10 text-center outline-none rounded hover:bg-gray-200"
-                value={getMonth(monthYear)}
-                onChange={(e) => {
-                  setMonthYear(setMonth(monthYear, Number(e.target.value)));
-                }}
-              >
-                {Array.from(Array(11).keys()).map((i) => (
-                  <option value={i} key={i}>
-                    {format(new Date(2000, i, 1), 'MMMM')}
-                  </option>
-                ))}
-              </select>
-              <select
-                name="year"
-                className="w-24 h-10 text-center outline-none rounded hover:bg-gray-200"
-                value={getYear(monthYear)}
-                onChange={(e) => {
-                  setMonthYear(setYear(monthYear, Number(e.target.value)));
-                }}
-              >
-                {Array.from(Array(101).keys()).map((i) => (
-                  <option value={2000 + i} key={i}>
-                    {2000 + i}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <a
-              className="nice-dates-navigation_next"
-              onClick={() => setMonthYear(addMonths(monthYear, 1))}
-            />
-          </div>
-        </div>
+      <div className="relative overflow-hidden">
+        <DateOverlay
+          {...{
+            calendarState,
+            setCalendarState,
+            monthYear,
+            setMonthYear,
+          }}
+        />
         <DateRangePickerCalendar
           locale={enGB}
           modifiers={modifiers}
@@ -128,10 +111,27 @@ const RangePicker = ({
             }
           }}
         />
-        <div className="flex justify-center items-center gap-x-3 py-4">
+      </div>
+      <div className="flex justify-between items-center px-6 py-4 border-t border-gray-100">
+        <button
+          className={classNames(
+            'text-blue-500 hover:text-blue-400',
+            isDisabledDate(today) ? 'cursor-not-allowed' : 'cursor-pointer',
+          )}
+          disabled={isDisabledDate(today)}
+          onClick={() => {
+            if (!isDisabledDate(today)) {
+              setDate(today);
+              setMonthYear(today);
+            }
+          }}
+        >
+          Today
+        </button>
+        <div className="flex gap-x-3">
           <select
             name="hour"
-            className="w-20 h-10 text-center outline-none rounded hover:bg-gray-200"
+            className="w-20 h-10 text-center outline-none border rounded bg-transparent hover:bg-gray-200"
             value={date ? getHours(date) : 0}
             onChange={(e) => {
               if (date) {
@@ -148,7 +148,7 @@ const RangePicker = ({
           </select>
           <select
             name="minute"
-            className="w-20 h-10 text-center outline-none rounded hover:bg-gray-200"
+            className="w-20 h-10 text-center outline-none border rounded bg-transparent hover:bg-gray-200"
             value={date ? getMinutes(date) : 0}
             onChange={(e) => {
               if (date) {

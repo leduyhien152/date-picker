@@ -167,7 +167,7 @@ const DateOverlay = ({
       <Transition
         show={calendarState !== 'DAY'}
         enter={['ease-out', 'duration-200']}
-        enterFrom={['opacity-0', 'scale-150']}
+        enterFrom={['opacity-0', 'scale-125']}
         enterTo={['opacity-100', 'scale-100']}
         leave={['ease-out', 'duration-200']}
         leaveFrom={['opacity-100', 'scale-100']}
@@ -176,7 +176,7 @@ const DateOverlay = ({
         onExited={() => setOldState(calendarState)}
       >
         <div
-          className="absolute top-0 z-50 w-full bg-white transition-all transform"
+          className="absolute top-0 z-40 w-full bg-white transition-all transform"
           style={{
             top: headerHeight,
             height: contentHeight,
