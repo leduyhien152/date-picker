@@ -1,4 +1,5 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Icon, Transition } from '@sajari-ui/core';
 import { DatePickerCalendar } from 'react-nice-dates';
 import {
   addMonths,
@@ -12,7 +13,7 @@ import {
   setMonth,
   setYear,
 } from 'date-fns';
-import { da, enGB } from 'date-fns/locale';
+import { enGB } from 'date-fns/locale';
 import classNames from 'classnames';
 
 import 'react-nice-dates/build/style.css';
@@ -60,10 +61,12 @@ const Header = ({
   setMonthYear,
 }: HeaderProps) => {
   const fromYear = 1990;
+  const maxPage = 100;
   const [page, setPage] = useState(
     Math.floor((getYear(monthYear) - fromYear) / 12),
   );
   const [displayYear, setDisplayYear] = useState(getYear(monthYear));
+  const [oldState, setOldState] = useState(calendarState);
 
   useEffect(() => {
     setPage(Math.floor((getYear(monthYear) - fromYear) / 12));
@@ -86,9 +89,6 @@ const Header = ({
     if (datesWeekHeader && datesGrid) {
       setContentHeight(datesWeekHeader.clientHeight + datesGrid.clientHeight);
     }
-    return () => {
-      setContentHeight(0);
-    };
   }, [calendarState]);
 
   return (
@@ -110,8 +110,20 @@ const Header = ({
                   </HeaderButton>
                 </div>
                 <div className="flex gap-x-3">
-                  <HeaderButton>{'<'}</HeaderButton>
-                  <HeaderButton>{'>'}</HeaderButton>
+                  <HeaderButton
+                    onClick={() => {
+                      setMonthYear(addMonths(monthYear, -1));
+                    }}
+                  >
+                    <Icon name="chevron-left" />
+                  </HeaderButton>
+                  <HeaderButton
+                    onClick={() => {
+                      setMonthYear(addMonths(monthYear, 1));
+                    }}
+                  >
+                    <Icon name="chevron-right" />
+                  </HeaderButton>
                 </div>
               </>
             ),
@@ -124,14 +136,16 @@ const Header = ({
                       setDisplayYear(Math.max(displayYear - 1, fromYear));
                     }}
                   >
-                    {'<'}
+                    <Icon name="chevron-left" />
                   </HeaderButton>
                   <HeaderButton
                     onClick={() => {
-                      setDisplayYear(displayYear + 1);
+                      setDisplayYear(
+                        Math.min(displayYear + 1, fromYear + 12 * maxPage - 1),
+                      );
                     }}
                   >
-                    {'>'}
+                    <Icon name="chevron-right" />
                   </HeaderButton>
                 </div>
               </>
@@ -147,14 +161,14 @@ const Header = ({
                       setPage(Math.max(page - 1, 0));
                     }}
                   >
-                    {'<'}
+                    <Icon name="chevron-left" />
                   </HeaderButton>
                   <HeaderButton
                     onClick={() => {
-                      setPage(page + 1);
+                      setPage(Math.min(page + 1, maxPage));
                     }}
                   >
-                    {'>'}
+                    <Icon name="chevron-right" />
                   </HeaderButton>
                 </div>
               </>
@@ -162,60 +176,70 @@ const Header = ({
           }[calendarState]
         }
       </div>
-      <div
-        className="absolute top-0 z-50 w-full bg-white transition-all duration-200"
-        style={{
-          top: headerHeight,
-          height: contentHeight,
-          opacity: calendarState === 'DAY' ? '0.5' : '1',
-          transform: calendarState === 'DAY' ? 'scale(0)' : 'scale(1)',
-        }}
+      <Transition
+        show={calendarState !== 'DAY'}
+        enter={['ease-out', 'duration-200']}
+        enterFrom={['opacity-0', 'scale-150']}
+        enterTo={['opacity-100', 'scale-100']}
+        leave={['ease-out', 'duration-200']}
+        leaveFrom={['opacity-100', 'scale-100']}
+        leaveTo={['opacity-0', 'scale-125']}
+        onEnter={() => setOldState(calendarState)}
+        onExited={() => setOldState(calendarState)}
       >
-        {
+        <div
+          className="absolute top-0 z-50 w-full bg-white transition-all transform"
+          style={{
+            top: headerHeight,
+            height: contentHeight,
+          }}
+        >
           {
-            DAY: <></>,
-            MONTH: (
-              <div className="grid grid-cols-3 gap-x-7 px-7 w-full h-full text-center items-center">
-                {Array.from(Array(12).keys()).map((i) => (
-                  <ContentButton
-                    key={i}
-                    selected={
-                      i === getMonth(monthYear) &&
-                      displayYear === getYear(monthYear)
-                    }
-                    onClick={() => {
-                      setMonthYear(
-                        setYear(setMonth(monthYear, i), displayYear),
-                      );
-                      setCalendarState('DAY');
-                    }}
-                  >
-                    {format(new Date(2000, i, 1), 'MMMM')}
-                  </ContentButton>
-                ))}
-              </div>
-            ),
-            YEAR: (
-              <div className="grid grid-cols-3 gap-x-7 px-7 w-full h-full text-center items-center">
-                {Array.from(Array(12).keys()).map((i) => (
-                  <ContentButton
-                    key={i}
-                    selected={fromYear + page * 12 + i === getYear(monthYear)}
-                    onClick={() => {
-                      setMonthYear(
-                        setYear(monthYear, fromYear + page * 12 + i),
-                      );
-                      setCalendarState('DAY');
-                    }}
-                  >
-                    {fromYear + page * 12 + i}
-                  </ContentButton>
-                ))}
-              </div>
-            ),
-          }[calendarState]
-        }
-      </div>
+            {
+              DAY: <></>,
+              MONTH: (
+                <div className="grid grid-cols-3 gap-x-7 px-7 w-full h-full text-center items-center transition-all transform">
+                  {Array.from(Array(12).keys()).map((i) => (
+                    <ContentButton
+                      key={i}
+                      selected={
+                        i === getMonth(monthYear) &&
+                        displayYear === getYear(monthYear)
+                      }
+                      onClick={() => {
+                        setMonthYear(
+                          setYear(setMonth(monthYear, i), displayYear),
+                        );
+                        setCalendarState('DAY');
+                      }}
+                    >
+                      {format(new Date(2000, i, 1), 'MMMM')}
+                    </ContentButton>
+                  ))}
+                </div>
+              ),
+              YEAR: (
+                <div className="grid grid-cols-3 gap-x-7 px-7 w-full h-full text-center items-center transition-all transform">
+                  {Array.from(Array(12).keys()).map((i) => (
+                    <ContentButton
+                      key={i}
+                      selected={fromYear + page * 12 + i === getYear(monthYear)}
+                      onClick={() => {
+                        setMonthYear(
+                          setYear(monthYear, fromYear + page * 12 + i),
+                        );
+                        setCalendarState('DAY');
+                      }}
+                    >
+                      {fromYear + page * 12 + i}
+                    </ContentButton>
+                  ))}
+                </div>
+              ),
+            }[oldState]
+          }
+        </div>
+      </Transition>
     </>
   );
 };
@@ -231,7 +255,6 @@ const DatePicker = ({ date, setDate }: Props) => {
 
   return (
     <div className="w-full max-w-lg border-2 border-gray-100 relative">
-      {/* <div className="absolute top-0 z-50 w-full bg-white"> */}
       <Header
         {...{
           calendarState,
@@ -240,7 +263,6 @@ const DatePicker = ({ date, setDate }: Props) => {
           setMonthYear,
         }}
       />
-      {/* </div> */}
       <DatePickerCalendar
         locale={enGB}
         date={date}
