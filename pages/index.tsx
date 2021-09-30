@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import DatePicker from '../components/DatePicker';
 import RangePicker from '../components/RangePicker';
+import { default as DatePickerV2 } from '../components/DatePickerV2';
 
 import 'react-nice-dates/build/style.css';
 import type { NextPage } from 'next';
@@ -13,6 +14,8 @@ const Home: NextPage = () => {
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const [date2, setDate2] = useState(new Date());
 
   const [showChild, setShowChild] = useState(false);
 
@@ -48,6 +51,13 @@ const Home: NextPage = () => {
             : 'none'}
         </p>
         <RangePicker {...{ startDate, setStartDate, endDate, setEndDate }} />
+
+        <p>
+          {date2
+            ? format(date2, 'ccc, dd MMM HH:mm', { locale: enGB })
+            : 'none'}
+        </p>
+        <DatePickerV2 date={date2} setDate={setDate2} />
       </main>
     </div>
   );

@@ -16,7 +16,7 @@ module.exports = {
           backgroundColor: '#3f83f8 !important',
         },
         '.nice-dates-day:after': {
-          borderColor: '#1c64f2 !important',
+          borderColor: '#3f83f8 !important',
         },
       };
 
