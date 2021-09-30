@@ -58,8 +58,9 @@ const RangePicker = ({
             focus === 'startDate' ? 'translate-x-0' : 'translate-x-full',
           )}
         ></div>
-        <div className="grid grid-cols-2 text-center items-center justify-center absolute top-0 left-0 w-full h-full cursor-pointer">
+        <div className="grid grid-cols-2 text-center items-center justify-center absolute top-0 left-0 w-full h-full">
           <div
+            className="cursor-pointer flex items-center justify-center h-full"
             onClick={() => {
               setFocus('startDate');
               if (startDate) {
@@ -72,6 +73,7 @@ const RangePicker = ({
               : '-'}
           </div>
           <div
+            className="cursor-pointer flex items-center justify-center h-full"
             onClick={() => {
               setFocus('endDate');
               if (endDate) {
