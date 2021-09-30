@@ -1,24 +1,18 @@
 import { useState } from 'react';
 import { DateRangePickerCalendar } from 'react-nice-dates';
 import {
-  addMonths,
   format,
   getHours,
   getMinutes,
-  getMonth,
-  getYear,
   set,
   setHours,
   setMinutes,
-  setMonth,
-  setYear,
   startOfDay,
 } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import classNames from 'classnames';
-
-import 'react-nice-dates/build/style.css';
 import DateOverlay from './DateOverlay';
+import 'react-nice-dates/build/style.css';
 
 interface Props {
   startDate: Date | null;

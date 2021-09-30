@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { DatePickerCalendar } from 'react-nice-dates';
 import { getHours, getMinutes, set, setHours, setMinutes } from 'date-fns';
 import { enGB } from 'date-fns/locale';
-import 'react-nice-dates/build/style.css';
 import DateOverlay from './DateOverlay';
+import 'react-nice-dates/build/style.css';
 
 interface Props {
   date: Date;
