@@ -51,7 +51,7 @@ const RangePicker = ({
 
   return (
     <div className="w-full max-w-lg border-2 border-gray-100 relative">
-      <div className="border rounded-2xl m-5 px-5 py-8 bg-gray-200 relative">
+      <div className="border-2 rounded-2xl m-5 mb-0 px-5 py-8 bg-gray-200 relative">
         <div
           className={classNames(
             'absolute top-0 left-0 w-1/2 h-full bg-white rounded-2xl transition-all duration-200 ease-in-out transform',
@@ -60,7 +60,7 @@ const RangePicker = ({
         ></div>
         <div className="grid grid-cols-2 text-center items-center justify-center absolute top-0 left-0 w-full h-full">
           <div
-            className="cursor-pointer flex items-center justify-center h-full"
+            className="cursor-pointer flex flex-col items-center justify-center h-full"
             onClick={() => {
               setFocus('startDate');
               if (startDate) {
@@ -68,12 +68,13 @@ const RangePicker = ({
               }
             }}
           >
+            <span className="text-gray-400 text-xs">Start date</span>
             {startDate
               ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
               : '-'}
           </div>
           <div
-            className="cursor-pointer flex items-center justify-center h-full"
+            className="cursor-pointer flex flex-col items-center justify-center h-full"
             onClick={() => {
               setFocus('endDate');
               if (endDate) {
@@ -81,6 +82,7 @@ const RangePicker = ({
               }
             }}
           >
+            <span className="text-gray-400 text-xs">End date</span>
             {endDate
               ? format(endDate, 'ccc, dd MMM HH:mm', { locale: enGB })
               : '-'}

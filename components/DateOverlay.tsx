@@ -89,7 +89,7 @@ const DateOverlay = ({
           {
             DAY: (
               <>
-                <div className="flex gap-x-3">
+                <div className="flex gap-x-2">
                   <HeaderButton onClick={() => setCalendarState('MONTH')}>
                     {format(monthYear, 'MMMM')}
                   </HeaderButton>
@@ -97,7 +97,7 @@ const DateOverlay = ({
                     {format(monthYear, 'yyyy')}
                   </HeaderButton>
                 </div>
-                <div className="flex gap-x-3">
+                <div className="flex gap-x-5">
                   <HeaderButton
                     onClick={() => {
                       setMonthYear(addMonths(monthYear, -1));
@@ -118,7 +118,7 @@ const DateOverlay = ({
             MONTH: (
               <>
                 <HeaderButton>{displayYear}</HeaderButton>
-                <div className="flex gap-x-3">
+                <div className="flex gap-x-5">
                   <HeaderButton
                     onClick={() => {
                       setDisplayYear(Math.max(displayYear - 1, fromYear));
@@ -143,7 +143,7 @@ const DateOverlay = ({
                 <HeaderButton>{`${fromYear + page * 12} - ${
                   fromYear + page * 12 + 11
                 }`}</HeaderButton>
-                <div className="flex gap-x-3">
+                <div className="flex gap-x-5">
                   <HeaderButton
                     onClick={() => {
                       setPage(Math.max(page - 1, 0));
