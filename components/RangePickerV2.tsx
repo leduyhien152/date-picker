@@ -12,6 +12,7 @@ import {
 import { enGB } from 'date-fns/locale';
 import classNames from 'classnames';
 import DateOverlay from './DateOverlay';
+import { getDateWithoutTime } from '../utils/DateUtils';
 import 'react-nice-dates/build/style.css';
 
 interface Props {
@@ -30,12 +31,7 @@ const RangePicker = ({
   endDate,
   setEndDate,
 }: Props) => {
-  const today = set(new Date(), {
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });
+  const today = getDateWithoutTime();
   const [monthYear, setMonthYear] = useState(today);
   const [calendarState, setCalendarState] = useState<CalendarState>('DAY');
   const [focus, setFocus] = useState<DateRangeFocus>('startDate');
@@ -63,12 +59,26 @@ const RangePicker = ({
           )}
         ></div>
         <div className="grid grid-cols-2 text-center items-center justify-center absolute top-0 left-0 w-full h-full cursor-pointer">
-          <div onClick={() => setFocus('startDate')}>
+          <div
+            onClick={() => {
+              setFocus('startDate');
+              if (startDate) {
+                setMonthYear(getDateWithoutTime(startDate));
+              }
+            }}
+          >
             {startDate
               ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
               : '-'}
           </div>
-          <div onClick={() => setFocus('endDate')}>
+          <div
+            onClick={() => {
+              setFocus('endDate');
+              if (endDate) {
+                setMonthYear(getDateWithoutTime(endDate));
+              }
+            }}
+          >
             {endDate
               ? format(endDate, 'ccc, dd MMM HH:mm', { locale: enGB })
               : '-'}

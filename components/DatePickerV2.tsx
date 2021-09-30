@@ -3,6 +3,7 @@ import { DatePickerCalendar } from 'react-nice-dates';
 import { getHours, getMinutes, set, setHours, setMinutes } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import DateOverlay from './DateOverlay';
+import { getDateWithoutTime } from '../utils/DateUtils';
 import 'react-nice-dates/build/style.css';
 
 interface Props {
@@ -13,12 +14,7 @@ interface Props {
 type CalendarState = 'DAY' | 'MONTH' | 'YEAR';
 
 const DatePicker = ({ date, setDate }: Props) => {
-  const today = set(new Date(), {
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });
+  const today = getDateWithoutTime();
   const [monthYear, setMonthYear] = useState(today);
   const [calendarState, setCalendarState] = useState<CalendarState>('DAY');
 

@@ -39,22 +39,6 @@ const Home: NextPage = () => {
 
       <main className="flex flex-col items-center py-10 gap-y-10">
         <p>
-          {date ? format(date, 'ccc, dd MMM HH:mm', { locale: enGB }) : 'none'}
-        </p>
-        <DatePicker date={date} setDate={setDate} />
-
-        <p>
-          {startDate
-            ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
-            : 'none'}
-          {' - '}
-          {endDate
-            ? format(endDate, 'ccc, dd MMM HH:mm', { locale: enGB })
-            : 'none'}
-        </p>
-        <RangePicker {...{ startDate, setStartDate, endDate, setEndDate }} />
-
-        <p>
           {date2
             ? format(date2, 'ccc, dd MMM HH:mm', { locale: enGB })
             : 'none'}
@@ -76,6 +60,22 @@ const Home: NextPage = () => {
           endDate={endDate2}
           setEndDate={setEndDate2}
         />
+
+        <p>
+          {date ? format(date, 'ccc, dd MMM HH:mm', { locale: enGB }) : 'none'}
+        </p>
+        <DatePicker date={date} setDate={setDate} />
+
+        <p>
+          {startDate
+            ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
+            : 'none'}
+          {' - '}
+          {endDate
+            ? format(endDate, 'ccc, dd MMM HH:mm', { locale: enGB })
+            : 'none'}
+        </p>
+        <RangePicker {...{ startDate, setStartDate, endDate, setEndDate }} />
       </main>
     </div>
   );
