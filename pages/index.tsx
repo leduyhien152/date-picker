@@ -31,21 +31,28 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex flex-col items-center py-10 gap-y-10">
-        <p>
-          {date ? format(date, 'ccc, dd MMM HH:mm', { locale: enGB }) : 'none'}
-        </p>
-        <DatePicker date={date} setDate={setDate} />
-
-        <p>
-          {startDate
-            ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
-            : 'none'}
-          {' - '}
-          {endDate
-            ? format(endDate, 'ccc, dd MMM HH:mm', { locale: enGB })
-            : 'none'}
-        </p>
-        <RangePicker {...{ startDate, setStartDate, endDate, setEndDate }} />
+        <section className="flex flex-col items-center w-full">
+          <h2 className="text-xl font-semibold m-2">Date Picker</h2>
+          <p className="mb-5">
+            {date
+              ? format(date, 'ccc, dd MMM HH:mm', { locale: enGB })
+              : 'none'}
+          </p>
+          <DatePicker date={date} setDate={setDate} />
+        </section>
+        <section className="flex flex-col items-center w-full">
+          <h2 className="text-xl font-semibold m-2">Range Picker</h2>
+          <p className="mb-5">
+            {startDate
+              ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
+              : 'none'}
+            {' - '}
+            {endDate
+              ? format(endDate, 'ccc, dd MMM HH:mm', { locale: enGB })
+              : 'none'}
+          </p>
+          <RangePicker {...{ startDate, setStartDate, endDate, setEndDate }} />
+        </section>
       </main>
     </div>
   );
