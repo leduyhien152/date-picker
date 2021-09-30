@@ -71,15 +71,15 @@ const DatePicker = ({ date, setDate }: Props) => {
       <DatePickerCalendar
         locale={enGB}
         date={date}
-        month={monthYear}
-        onMonthChange={(date) => {
-          if (date) {
-            setMonthYear(date);
-          }
-        }}
         onDateChange={(date) => {
           if (date) {
             setDate(date);
+            setMonthYear(date);
+          }
+        }}
+        month={monthYear}
+        onMonthChange={(date) => {
+          if (date) {
             setMonthYear(date);
           }
         }}

@@ -50,14 +50,14 @@ const RangePicker = ({
 
   return (
     <div className="w-full max-w-lg border-2 border-gray-100 relative">
-      <div className="border rounded-2xl m-5 p-5 relative">
+      <div className="border rounded-2xl m-5 px-5 py-8 bg-gray-200 relative">
         <div
           className={classNames(
-            'absolute top-0 left-0 w-1/2 h-full bg-gray-200 rounded-2xl transition-all duration-200 ease-in-out transform',
+            'absolute top-0 left-0 w-1/2 h-full bg-white rounded-2xl transition-all duration-200 ease-in-out transform',
             focus === 'startDate' ? 'translate-x-0' : 'translate-x-full',
           )}
         ></div>
-        <div className="grid grid-cols-2 text-center items-center absolute top-0 left-0 w-full h-full cursor-pointer">
+        <div className="grid grid-cols-2 text-center items-center justify-center absolute top-0 left-0 w-full h-full cursor-pointer">
           <div onClick={() => setFocus('startDate')}>
             {startDate
               ? format(startDate, 'ccc, dd MMM HH:mm', { locale: enGB })
@@ -116,11 +116,17 @@ const RangePicker = ({
         <DateRangePickerCalendar
           locale={enGB}
           modifiers={modifiers}
+          focus={focus}
           startDate={startDate || undefined}
           endDate={endDate || undefined}
           onStartDateChange={setStartDate}
           onEndDateChange={setEndDate}
-          focus={focus}
+          month={monthYear}
+          onMonthChange={(date) => {
+            if (date) {
+              setMonthYear(date);
+            }
+          }}
         />
         <div className="flex justify-center items-center gap-x-3 py-4">
           <select
