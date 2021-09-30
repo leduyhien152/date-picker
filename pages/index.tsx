@@ -5,8 +5,6 @@ import { enGB } from 'date-fns/locale';
 import DatePicker from '../components/DatePicker';
 import RangePicker from '../components/RangePicker';
 import { default as DatePickerV2 } from '../components/DatePickerV2';
-
-import 'react-nice-dates/build/style.css';
 import type { NextPage } from 'next';
 
 const Home: NextPage = () => {

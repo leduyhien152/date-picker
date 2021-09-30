@@ -13,7 +13,6 @@ import {
   setYear,
 } from 'date-fns';
 import { enGB } from 'date-fns/locale';
-
 import 'react-nice-dates/build/style.css';
 
 interface Props {

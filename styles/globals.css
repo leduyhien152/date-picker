@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nice-dates-day::before {
+  background-color: #3f83f8 !important;
+}
+.nice-dates-day::after {
+  border-color: #3f83f8 !important;
+}

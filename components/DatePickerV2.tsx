@@ -15,7 +15,6 @@ import {
 } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import classNames from 'classnames';
-
 import 'react-nice-dates/build/style.css';
 
 interface HeaderButtonProps extends React.HTMLAttributes<HTMLButtonElement> {}
